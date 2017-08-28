@@ -1,20 +1,39 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Vigor.Utils.Inputs;
+using Vigor.Entity;
+using System;
 
 namespace Vigor
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D test;
+        int _width;
+        int _height;
+        float gamePadX;
+        float gamePadY;
+        Player player;
 
-        public Game1()
+        SpriteFont spriteFont;
+
+        public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+
+            //Fullscreen
+            //_width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            //_height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            //graphics.PreferredBackBufferWidth = _width;
+            //graphics.PreferredBackBufferHeight = _height;
+            //graphics.ApplyChanges();
+
             Content.RootDirectory = "Content";
         }
 
@@ -27,7 +46,6 @@ namespace Vigor
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -41,6 +59,10 @@ namespace Vigor
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            player = new Player(this.Content.Load<Texture2D>("link"), new Vector2(), 5);
+            //this.test = this.Content.Load<Texture2D>("default");
+            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+
         }
 
         /// <summary>
@@ -61,8 +83,13 @@ namespace Vigor
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            gamePadX = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X;
+            gamePadY = GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y;
 
-            // TODO: Add your update logic here
+            InputController.HandlePlayerInput(gamePadX, gamePadY, player);
+            player.Update(gameTime);
+
+            //Console.WriteLine(gameTime.TotalGameTime);
 
             base.Update(gameTime);
         }
@@ -74,10 +101,16 @@ namespace Vigor
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            player.Draw(spriteBatch);
+            spriteBatch.DrawString(spriteFont, string.Format("gamepad-X{0} : gamepad-Y{1}", gamePadX, gamePadY), new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight - 30), Color.Black);
+            spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
+
+        
     }
 }

@@ -41,9 +41,15 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Entity\Character.cs" />
+    <Compile Include="Entity\Player.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Inputs\InputController.cs" />
+    <Compile Include="Utils\InputStates.cs" />
+    <Compile Include="Utils\MyGameState.cs" />
+    <Compile Include="Utils\Rectangles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -53,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\default.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
